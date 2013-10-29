@@ -1,9 +1,10 @@
-## Example
+## Object Oriented Test Driven Javascript + Packaging
 
-The following is an example on how to generate the signature for the reference sample as defined in  
- - http://oauth.net/core/1.0a/#rfc.section.A.5.1 
- - http://oauth.net/core/1.0a/#rfc.section.A.5.2
+- - -
 
+### IE6 style javascript
+
+`pint.js`
 ```js
 var httpMethod = 'GET',
     url = 'http://photos.example.net/photos',
@@ -21,8 +22,9 @@ var httpMethod = 'GET',
   	tokenSecret = 'pfkkdhi9sl3r4s00',
   	encodedSignature = oauthSignature.generate(httpMethod, url, parameters, consumerSecret, tokenSecret);
 ```
-
-
+- - -
 
 ## Example 2
 
+
+### Example 3
