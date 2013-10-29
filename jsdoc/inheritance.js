@@ -14,6 +14,7 @@ var Glass = function () {
 	// Ensure the constructor is correct
 	Glass.prototype.constructor = Glass;
 
+	/** @param {number} consumedQuantity How much has been consumed in oz. */
 	Glass.prototype.consume = function (consumedQuantity) {
 		if (this.quantity > 0) {
 			this.quantity -= consumedQuantity;
@@ -21,7 +22,7 @@ var Glass = function () {
 	};
 
 	Glass.prototype.drink = function () {
-		this.consume(1);	
+		this.consume(1);
 	};
 
 	Glass.prototype.quaff =	function () {
@@ -40,6 +41,10 @@ var Glass = function () {
 var Pint = function () {
 	'use strict';
 
+	/**
+	 * @constructor
+	 * @extends {Glass}
+	 */
 	function Pint() {
 		Glass.call(this, 20); // Pint size in fl. oz.
 		this.quantity = 20; // Pint size in fl. oz.
@@ -54,9 +59,17 @@ var Pint = function () {
 	return Pint;
 }();
 
+var p = new Pint();
+// p.capacity; // intellisense works with jsdoc but does not work without
+p.consume(); // Gives parameter intellisense
+
 var HalfPint = function () {
 	'use strict';
 
+	/**
+	 * @constructor
+	 * @extends {Glass}
+	 */
 	function HalfPint() {
 		Glass.call(this, 10); // Half Pint size in fl. oz.
 		this.quantity = 10; // Half Pint size in fl. oz.
