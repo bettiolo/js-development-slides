@@ -410,3 +410,9 @@ Results
 ![](screenshots/jasmine-inheritance-ok.png)
 
 - - -
+
+## Tool break!
+
+Editor config enforces coding style across different editors
+
+_(demo)_
