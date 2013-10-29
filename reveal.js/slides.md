@@ -1,5 +1,13 @@
 ## Object Oriented Test Driven Javascript + Packaging
 
+
+
+- `fun.call(thisArg, arg1, ...)`? 
+
+- `fun.apply(thisArg, [arg1, ...])`?
+
+- `boundFun = fun.bind(thisArg)`?
+
 - - -
 
 ### IE6 style javascript
@@ -31,9 +39,17 @@ function downInOne() {
 
 - - -
 
+## Tool break!
+
+[Jasmine](http://pivotal.github.io/jasmine/) spec runner
+
+_(demo)_
+
+- - -
+
 ### But we are in 2013, TDD?
 
-`pint.spec.js` using [Jasmine](http://pivotal.github.io/jasmine/)
+`pint.spec.js` using Jasmine
 
 ```js
 describe('Pint', function () {
@@ -256,13 +272,42 @@ Results
 
 - - -
 
+## Tool break!
+
+[EditorConfig](http://editorconfig.org/) enforces coding style across different editors
+
+```
+# editorconfig.org
+root = true
+
+[*]
+indent_style = tab
+indent_size = 4
+tab_width = 4
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+[*.{md,html,htm,html,json,yml}]
+indent_style = tab
+indent_size = 2
+[.jshintrc]
+indent_style = tab
+indent_size = 2
+```
+
+_(demo)_
+
+- - -
+
 ## Inheritance
 
 We have too much duplicated logic.
 
 - JavaScript is a prototypal language, the `prototype` property is available on each function
 
-- We can use the `prototype` to define a class` scaffolding and a constructor to create an instance
+- We can use the `prototype` to scaffold a class and a constructor to create an instance
 
 - We can also inherit anoter object's `prototype`
 
@@ -411,8 +456,50 @@ Results
 
 - - -
 
-## Tool break!
+## I want more TOOLS!!!11!
 
-Editor config enforces coding style across different editors
+- JsHint
+- JsDoc
+- Karma + PhantomJs
+- Travis-CI
+- RequireJs
+- Grunt
 
-_(demo)_
+- - -
+
+## JsHint
+
+`.jshintrc`
+
+```json
+{
+  "bitwise" : true,
+  "browser" : true,
+  "camelcase" : true,
+  "curly" : true,
+  "eqeqeq" : true,
+  "es3" : false,
+  "esnext" : false,
+  "forin" : true,
+  "indent" : 4,
+  "immed" : true,
+  "latedef" : true,
+  "maxlen" : 120,
+  "newcap" : true,
+  "noarg" : true,
+  "noempty" : true,
+  "nonew" : true,
+  "onevar" : true,
+  "plusplus" : false,
+  "quotmark" : "single",
+  "regexp" : true,
+  "strict" : true,
+  "trailing" : true,
+  "undef" : true,
+  "unused" : true
+}
+```
+
+`npm install -g jshint`
+
+`jshint filename.js` _(demo)_
