@@ -5,6 +5,7 @@
 ### IE6 style javascript
 
 `pint.js`
+
 ```js
 var capacity = 20; // Fl. oz.
 var quantity = 20; // Fl. oz.
@@ -30,9 +31,10 @@ function downInOne() {
 
 - - -
 
-### Test with [Jasmine](http://pivotal.github.io/jasmine/)
+### But we are in 2013, TDD?
 
-`pint.spec.js`
+`pint.spec.js` using [Jasmine](http://pivotal.github.io/jasmine/)
+
 ```js
 describe('Pint', function () {
   'use strict';
@@ -86,11 +88,18 @@ describe('Customer', function () {
 ```
 
 
+Spec runner
+
+![](/screenshots/spec-runner-pint-only.png)
+
+
 Results
 
-![jasmine ok](/screenshots/jasmine-ok.png)
+![](/screenshots/jasmine-ok.png)
 
 - - -
+
+The spec changes, you need to support also half pint size
 
 `halfPint.js`
 ```js
@@ -116,4 +125,17 @@ function downInOne() {
 }
 ```
 
-### Example 3
+
+You write the tests and update the spec runner
+
+![](/screenshots/spec-runner-pint-and-halfPint.png)
+
+and ... 
+
+
+FAIL
+
+Globals are conflicting
+
+![](/screenshots/jasmine-ko.png)
+
