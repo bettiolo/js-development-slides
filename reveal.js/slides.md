@@ -678,3 +678,35 @@ node_js:
   }
 }
 ```
+- - -
+
+## RequireJs
+
+Develop using Asynchronous Module Definition
+
+```js
+define('glass', [], funcition () {
+  function Glass(capacity) {
+    // ...
+  }
+  return Glass;
+});
+
+define('pint', [ 'glass' ], function (Glass) {
+  function Pint() {
+    Glass.call(this, 20);
+    this.quantity = 20;
+  }
+  Pint.prototype = Object.create(Glass.prototype);
+  Pint.prototype.constructor = Pint;
+  return Pint;
+});
+
+require('pint', function (Pint)) {
+  // do something with Pint
+};
+```
+
+RequireJs can optimize a single file bundle
+
+_(demo)_
