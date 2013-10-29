@@ -593,3 +593,88 @@ var HalfPint = function () {
 ```
 
 _(demo)_
+
+- - -
+
+## Karma + PhantomJs
+
+`karma.conf.js` Headless test running
+
+```js
+module.exports = function (config) {
+  'use strict';
+
+  config.set({
+    basePath : '',
+    frameworks : ['jasmine'],
+    files : [
+      'inheritance.js',
+      '*.spec.js'
+    ],
+    exclude : [
+
+    ],
+    reporters : ['dots'],
+    port : 9876,
+    colors : true,
+    logLevel : config.LOG_INFO,
+    autoWatch : false,
+    browsers : ['PhantomJS'],
+    captureTimeout : 60000,
+    singleRun : true
+  });
+};
+```
+
+- `npm install -g karma`
+- `karma start`
+
+
+Results
+
+![](screenshots/karma-results.png)
+
+- single run
+- watch
+
+_(demo)_
+
+- - -
+
+## Travis-CI
+
+`.travis.yml` continuous integration for js + github
+
+```yml
+language: node_js
+node_js:
+  - 0.10
+```
+
+`package.json`
+
+```json
+{
+  "name": "package-name",
+  "author": "Marco Bettiolo <marco@bettiolo.it>",
+  "version": "0.0.1",
+  "devDependencies": {
+    "karma": "~0.10.4",
+    "karma-script-launcher": "~0.1.0",
+    "karma-chrome-launcher": "~0.1.0",
+    "karma-firefox-launcher": "~0.1.0",
+    "karma-html2js-preprocessor": "~0.1.0",
+    "karma-jasmine": "~0.1.3",
+    "karma-requirejs": "~0.1.0",
+    "karma-coffee-preprocessor": "~0.1.0",
+    "karma-phantomjs-launcher": "~0.1.0",
+    "grunt-karma": "~0.6.2"
+  },
+  "engines": {
+    "node": "~0.10"
+  },
+  "scripts": {
+    "test": "karma start"
+  }
+}
+```
