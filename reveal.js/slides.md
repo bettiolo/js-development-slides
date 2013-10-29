@@ -140,7 +140,7 @@ and ...
 
 Globals are conflicting because everything is running in the same `window` scope
 
-![](/screenshots/jasmine-ko.png)
+![](screenshots/jasmine-ko.png)
 
 Should we rename the variables? Will eventually break.
 
@@ -148,7 +148,7 @@ Should we rename the variables? Will eventually break.
 
 ### The module pattern
 
-Functions define the scope
+Functions define scope (if, for, do, ... not!)
 
 `pint.js`
 
@@ -252,4 +252,161 @@ and we update `halfPint.spec.js` as well ...
 
 Results
 
-![](/screenshots/jasmine-all-ok.png)
+![](screenshots/jasmine-all-ok.png)
+
+- - -
+
+## Inheritance
+
+We have too much duplicated logic.
+
+- JavaScript is a prototypal language, the `prototype` property is available on each function
+
+- We can use the `prototype` to define a class` scaffolding and a constructor to create an instance
+
+- We can also inherit anoter object's `prototype`
+
+- - -
+
+## Inheritance
+
+Pint and HalfPint inherits from 'abstract' Glass
+
+```js
+var Glass = function () { // This will be our base class
+  'use strict';
+
+  function Glass(capacity) {
+    this.quantity = 0; // Instance property
+    this.capacity = capacity; // Instance property
+  }
+
+  // Ensure the constructor is correct
+  Glass.prototype.constructor = Glass;
+
+  Glass.prototype.consume = function (consumedQuantity) {
+    if (this.quantity > 0) {
+      this.quantity -= consumedQuantity;
+    }
+  };
+
+  Glass.prototype.drink = function () {
+    this.consume(1);  
+  };
+
+  Glass.prototype.quaff = function () {
+    this.consume(4);
+  };
+
+  Glass.prototype.downInOne = function () {
+    this.consume(this.quantity);
+  };
+
+  // Return the constructor
+  return Glass;
+
+}(); // Immediately-Invoked Function Expression (IIFE)
+
+var Pint = function () {
+  'use strict';
+
+  function Pint() {
+    Glass.call(this, 20); // Pint size in fl. oz.
+    this.quantity = 20; // Pint size in fl. oz.
+  }
+
+  // Inherit the base class, available in ES5
+  Pint.prototype = Object.create(Glass.prototype);
+
+  // Ensure the constructor is correct
+  Pint.prototype.constructor = Pint;
+
+  return Pint;
+}();
+
+var HalfPint = function () {
+  'use strict';
+
+  function HalfPint() {
+    Glass.call(this, 10); // Half Pint size in fl. oz.
+    this.quantity = 10; // Half Pint size in fl. oz.
+  }
+
+  HalfPint.prototype = Object.create(Glass.prototype);
+
+  HalfPint.prototype.constructor = HalfPint;
+
+  return HalfPint;
+}();
+```
+
+
+Let's update the tests to use the `new` keyword
+
+We can now access the 'public' methods and properties of the base class
+
+```js
+describe('Pint', function () {
+  'use strict';
+  
+  var pint;
+
+  beforeEach(function () {
+    pint = new Pint();
+  });
+
+  it('Contains 20 fl. oz. of beer', function () {
+    expect(pint.quantity).toEqual(20);
+  });
+
+  it('Has 20 fl. oz. of capacity', function () {
+    expect(pint.capacity).toEqual(20);
+  });
+});
+
+describe('Pint Customer', function () {
+  'use strict';
+  
+  var pint;
+
+  beforeEach(function () {
+    pint = new Pint();
+  });
+
+  it('Drinks, 1 fl. oz. is consumed', function () {
+    pint.drink();
+    expect(pint.quantity).toEqual(19);
+  });
+
+  it('Quaffs, 4 fl. oz. are consumed', function () {
+    pint.quaff();
+    expect(pint.quantity).toEqual(16);
+  });
+
+  it('Drinks and then downs in one, the remaining beer is consumed', function () {
+    pint.drink();
+    pint.downInOne();
+    expect(pint.quantity).toEqual(0);
+  });
+
+  it('Cannot drink from a beer that has already been consumed', function () {
+    pint.downInOne();
+    pint.drink();
+    expect(pint.quantity).toEqual(0);
+  });
+
+  it('Cannot quaff from a beer that has already been consumed', function () {
+    pint.downInOne();
+    pint.quaff();
+    expect(pint.quantity).toEqual(0);
+  });
+
+});
+```
+
+
+Results
+
+![](screenshots/jasmine-inheritance-ok.png)
+
+- - -
