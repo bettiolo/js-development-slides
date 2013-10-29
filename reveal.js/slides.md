@@ -678,6 +678,7 @@ node_js:
   }
 }
 ```
+
 - - -
 
 ## RequireJs
@@ -710,3 +711,31 @@ require('pint', function (Pint)) {
 RequireJs can optimize a single file bundle
 
 _(demo)_
+
+- - -
+
+## Grunt
+
+Automates repetitive tasks
+
+- Bundles application and inlines almond.js
+
+- Concatenates js files
+
+- Cleans files and folders
+
+- Validates javascript files
+
+- Minifies application and generates source maps
+
+- Watches for file changes and triggers LiveReload
+
+- Runs tests
+
+- ... Many more
+
+_(demo)_
+
+- - -
+
+# Questions?
