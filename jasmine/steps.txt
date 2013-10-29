@@ -1,0 +1,24 @@
+function add(num1, num2) {
+	return num1 + num2;
+}
+
+--- 
+
+	it('Throws an error if not a number', function () {
+		var num1 = 'a';
+		var num2 = 2;
+		var result = function () {
+			add(num1, num2);
+		};
+
+		expect(result).toThrow();
+	})
+
+---
+
+function add(num1, num2) {
+	if (isNaN(num1)) {
+		throw new Error('not a number');
+	}
+	return num1 + num2;
+}
