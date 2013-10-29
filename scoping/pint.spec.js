@@ -1,49 +1,56 @@
 describe('Pint', function () {
 	'use strict';
+	
+	var pint;
+
+	beforeEach(function () {
+		pint = createPint();
+	});
 
 	it('Contains 20 fl. oz. of beer', function () {
-		expect(quantity).toEqual(20);
+		expect(pint.getQuantity()).toEqual(20);
 	});
 
 	it('Has 20 fl. oz. of capacity', function () {
-		expect(capacity).toEqual(20);
+		expect(pint.getCapacity()).toEqual(20);
 	});
 });
 
 describe('Pint Customer', function () {
 	'use strict';
+	
+	var pint;
 
 	beforeEach(function () {
-		quantity = 20;
-		capacity = 20;
+		pint = createPint();
 	});
 
 	it('Drinks, 1 fl. oz. is consumed', function () {
-		drink();
-		expect(quantity).toEqual(19);
+		pint.drink();
+		expect(pint.getQuantity()).toEqual(19);
 	});
 
 	it('Quaffs, 4 fl. oz. are consumed', function () {
-		quaff();
-		expect(quantity).toEqual(16);
+		pint.quaff();
+		expect(pint.getQuantity()).toEqual(16);
 	});
 
 	it('Drinks and then downs in one, the remaining beer is consumed', function () {
-		drink();
-		downInOne();
-		expect(quantity).toEqual(0);
+		pint.drink();
+		pint.downInOne();
+		expect(pint.getQuantity()).toEqual(0);
 	});
 
 	it('Cannot drink from a beer that has already been consumed', function () {
-		downInOne();
-		drink();
-		expect(quantity).toEqual(0);
+		pint.downInOne();
+		pint.drink();
+		expect(pint.getQuantity()).toEqual(0);
 	});
 
 	it('Cannot quaff from a beer that has already been consumed', function () {
-		downInOne();
-		quaff();
-		expect(quantity).toEqual(0);
+		pint.downInOne();
+		pint.quaff();
+		expect(pint.getQuantity()).toEqual(0);
 	});
 
 });

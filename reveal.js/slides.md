@@ -48,7 +48,7 @@ describe('Pint', function () {
   });
 });
 
-describe('Customer', function () {
+describe('Pint Customer', function () {
   'use strict';
 
   beforeEach(function () {
@@ -99,9 +99,12 @@ Results
 
 - - -
 
-The spec changes, you need to support also half pint size
+### Requirements change
+
+You need to support half pint size
 
 `halfPint.js`
+
 ```js
 var capacity = 10; // Fl. oz.
 var quantity = 10; // Fl. oz.
@@ -126,16 +129,127 @@ function downInOne() {
 ```
 
 
-You write the tests and update the spec runner
+Write the tests and update the spec runner
 
 ![](/screenshots/spec-runner-pint-and-halfPint.png)
 
 and ... 
 
 
-FAIL
+### FAIL
 
-Globals are conflicting
+Globals are conflicting because everything is running in the same `window` scope
 
 ![](/screenshots/jasmine-ko.png)
 
+Should we rename the variables? Will eventually break.
+
+- - -
+
+### The module pattern
+
+Functions define the scope
+
+`pint.js`
+
+```js
+function createPint() { // Constructor
+  var capacity = 20; // Private
+  var quantity = 20; // Private
+
+  function consume (consumedQuantity) { // Private
+    if (quantity > 0) {
+      quantity -= consumedQuantity;
+    }
+  }
+
+  return {
+    getCapacity : function () {
+      return capacity; // Read Only
+    },
+    getQuantity : function () {
+      return quantity; // Read Only
+    },
+    drink : function () {
+      consume(1); 
+    },
+    quaff : function () {
+      consume(4);
+    },
+    downInOne : function () {
+      consume(quantity);
+    }
+  };
+}
+```
+repeat for `halfPint.js`
+
+
+We quickly update the tests to use the 'constructor'
+
+`pint.spec.js`
+
+```js
+describe('Pint', function () {
+  'use strict';
+  
+  var pint;
+
+  beforeEach(function () {
+    pint = createPint();
+  });
+
+  it('Contains 20 fl. oz. of beer', function () {
+    expect(pint.getQuantity()).toEqual(20);
+  });
+
+  it('Has 20 fl. oz. of capacity', function () {
+    expect(pint.getCapacity()).toEqual(20);
+  });
+});
+
+describe('Pint Customer', function () {
+  'use strict';
+  
+  var pint;
+
+  beforeEach(function () {
+    pint = createPint();
+  });
+
+  it('Drinks, 1 fl. oz. is consumed', function () {
+    pint.drink();
+    expect(pint.getQuantity()).toEqual(19);
+  });
+
+  it('Quaffs, 4 fl. oz. are consumed', function () {
+    pint.quaff();
+    expect(pint.getQuantity()).toEqual(16);
+  });
+
+  it('Drinks and then downs in one, the remaining beer is consumed', function () {
+    pint.drink();
+    pint.downInOne();
+    expect(pint.getQuantity()).toEqual(0);
+  });
+
+  it('Cannot drink from a beer that has already been consumed', function () {
+    pint.downInOne();
+    pint.drink();
+    expect(pint.getQuantity()).toEqual(0);
+  });
+
+  it('Cannot quaff from a beer that has already been consumed', function () {
+    pint.downInOne();
+    pint.quaff();
+    expect(pint.getQuantity()).toEqual(0);
+  });
+
+});
+```
+and we update `halfPint.spec.js` as well ...
+
+
+Results
+
+![](/screenshots/jasmine-all-ok.png)
