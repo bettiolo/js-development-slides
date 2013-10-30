@@ -1,12 +1,20 @@
-## Object Oriented Test Driven Javascript + Packaging
+## Object Oriented, Test Driven Javascript + Packaging
 
+&nbsp;
 
+&nbsp;
 
-- `fun.call(thisArg, arg1, ...)`? 
+Marco Bettiolo
 
-- `fun.apply(thisArg, [arg1, ...])`?
+[github.com/bettiolo](http://github.com/bettiolo)
 
-- `boundFun = fun.bind(thisArg)`?
+- - -
+
+### Jasmine
+
+TDD with [Jasmine](http://pivotal.github.io/jasmine/) spec runner
+
+_(demo)_
 
 - - -
 
@@ -37,17 +45,12 @@ function downInOne() {
 }
 ```
 
-- - -
-
-## Tool break!
-
-[Jasmine](http://pivotal.github.io/jasmine/) spec runner
-
-_(demo)_
+... so 2001
 
 - - -
 
-### But we are in 2013, TDD?
+### But we are in 2013!
+### Where are the tests?
 
 `pint.spec.js` using Jasmine
 
@@ -145,14 +148,16 @@ function downInOne() {
 ```
 
 
-Write the tests and update the spec runner
+Write the tests inside `halfPint.spec.js`, 
+
+update the spec runner
 
 ![](/screenshots/spec-runner-pint-and-halfPint.png)
 
 and ... 
 
 
-### FAIL
+## FAIL
 
 Globals are conflicting because everything is running in the same `window` scope
 
@@ -162,7 +167,7 @@ Should we rename the variables? Will eventually break.
 
 - - -
 
-### The module pattern
+### Module pattern to the resque
 
 Functions define scope (if, for, do, ... not!)
 
@@ -272,7 +277,7 @@ Results
 
 - - -
 
-## Tool break!
+### Tool break!
 
 [EditorConfig](http://editorconfig.org/) enforces coding style across different editors
 
@@ -315,7 +320,7 @@ We have too much duplicated logic.
 
 ## Inheritance
 
-Pint and HalfPint inherits from 'abstract' Glass
+Let's pretend Pint and HalfPint inherits from 'abstract' Glass
 
 ```js
 var Glass = function () { // This will be our base class
@@ -739,3 +744,5 @@ _(demo)_
 - - -
 
 # Questions?
+
+Code + docs: [github.com/bettiolo/js-development](https://github.com/bettiolo/js-development)
