@@ -109,12 +109,12 @@ describe('Pint Customer', function () {
 
 Spec runner
 
-![](/screenshots/spec-runner-pint-only.png)
+![](screenshots/spec-runner-pint-only.png)
 
 
 Results
 
-![](/screenshots/jasmine-ok.png)
+![](screenshots/jasmine-ok.png)
 
 - - -
 
@@ -152,7 +152,7 @@ Write the tests inside `halfPint.spec.js`,
 
 update the spec runner
 
-![](/screenshots/spec-runner-pint-and-halfPint.png)
+![](screenshots/spec-runner-pint-and-halfPint.png)
 
 and ... 
 
