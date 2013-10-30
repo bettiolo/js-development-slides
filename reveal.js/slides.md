@@ -1,4 +1,4 @@
-## Object Oriented, Test Driven Javascript + Packaging
+## Object Oriented, Test Driven Javascript + Tools
 
 &nbsp;
 
