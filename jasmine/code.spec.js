@@ -7,6 +7,6 @@ describe('Calculator', function (){
 
 		expect(result).toBe(5);
 		expect(result).toBeGreaterThan(num1);
-	})
+	});
 
 });
