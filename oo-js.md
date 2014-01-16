@@ -1,29 +1,54 @@
+# Object Oriented Javascript
+
+### Marco Bettiolo
+- marco@bettiolo.it
+- @bettiolo
+- bettiolo.it
+
+- - -
+
 ## Topics
 
-- Scoping
-- Object Literals
-- Module Pattern
-- Objects / Constructurs
+- Variable scope
+[Link to Slide2](#/slide2def)
+- Object literals
+- Module pattern
+- Objects
 - Prototypal inheritance
 - Parent object access
+- JsDoc
 - CoffeeScript
 - TypeScript
 - EcmaScript Harmony
-- Multiple Inheritance
+
+- - -
 
 var scoping
 let: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let
 Declares a block scope local variable, optionally initializing it to a value.
 
-## Object Oriented Test Driven Javascript + Packaging
+- - -
 
+<iframe width="100%" height="500px" src="jasmine/spec-runner.html"></iframe>
 
+- - -
 
-- `fun.call(thisArg, arg1, ...)`? 
+```html
+  <html>
+  <head>
+    <script src="test.js"></script>
+    </head>
+  <body>
+    <p>
+      Hello World
+    </p>
+    <div>
+      <img src="example.png" />
+    </div>
+  </body>
+  </html>
 
-- `fun.apply(thisArg, [arg1, ...])`?
-
-- `boundFun = fun.bind(thisArg)`?
+```
 
 - - -
 
@@ -53,14 +78,6 @@ function downInOne() {
   consume(quantity);
 }
 ```
-
-- - -
-
-## Tool break!
-
-[Jasmine](http://pivotal.github.io/jasmine/) spec runner
-
-_(demo)_
 
 - - -
 
