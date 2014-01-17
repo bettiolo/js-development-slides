@@ -9,8 +9,9 @@
 
 ## Topics
 
-- Variable scope
-[Link to Slide2](#/slide2def)
+- [Scope & conflicts](#/scope)
+- Hoisting
+- Let keyword
 - Object literals
 - Module pattern
 - Objects
@@ -23,41 +24,11 @@
 
 - - -
 
-var scoping
-let: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let
-Declares a block scope local variable, optionally initializing it to a value.
-
-- - -
-
-<iframe width="100%" height="500px" src="jasmine/spec-runner.html"></iframe>
-
-- - -
-
-```html
-  <html>
-  <head>
-    <script src="test.js"></script>
-    </head>
-  <body>
-    <p>
-      Hello World
-    </p>
-    <div>
-      <img src="example.png" />
-    </div>
-  </body>
-  </html>
-
-```
-
-- - -
-
 ### IE6 style javascript
 
 `pint.js`
 
 ```js
-var capacity = 20; // Fl. oz.
 var quantity = 20; // Fl. oz.
 
 function consume (consumedQuantity) {
@@ -79,75 +50,6 @@ function downInOne() {
 }
 ```
 
-- - -
-
-### But we are in 2013, TDD?
-
-`pint.spec.js` using Jasmine
-
-```js
-describe('Pint', function () {
-  'use strict';
-
-  it('Contains 20 fl. oz. of beer', function () {
-    expect(quantity).toEqual(20);
-  });
-
-  it('Has 20 fl. oz. of capacity', function () {
-    expect(capacity).toEqual(20);
-  });
-});
-
-describe('Pint Customer', function () {
-  'use strict';
-
-  beforeEach(function () {
-    quantity = 20;
-    capacity = 20;
-  });
-
-  it('Drinks, 1 fl. oz. is consumed', function () {
-    drink();
-    expect(quantity).toEqual(19);
-  });
-
-  it('Quaffs, 4 fl. oz. are consumed', function () {
-    quaff();
-    expect(quantity).toEqual(16);
-  });
-
-  it('Drinks and then downs in one, the remaining beer is consumed', function () {
-    drink();
-    downInOne();
-    expect(quantity).toEqual(0);
-  });
-
-  it('Cannot drink from a beer that has already been consumed', function () {
-    downInOne();
-    drink();
-    expect(quantity).toEqual(0);
-  });
-
-  it('Cannot quaff from a beer that has already been consumed', function () {
-    downInOne();
-    quaff();
-    expect(quantity).toEqual(0);
-  });
-
-});
-```
-
-
-Spec runner
-
-![](/screenshots/spec-runner-pint-only.png)
-
-
-Results
-
-![](/screenshots/jasmine-ok.png)
-
-- - -
 
 ### Requirements change
 
@@ -156,7 +58,6 @@ You need to support half pint size
 `halfPint.js`
 
 ```js
-var capacity = 10; // Fl. oz.
 var quantity = 10; // Fl. oz.
 
 function consume (consumedQuantity) {
@@ -179,20 +80,107 @@ function downInOne() {
 ```
 
 
-Write the tests and update the spec runner
-
-![](/screenshots/spec-runner-pint-and-halfPint.png)
-
-and ... 
-
-
 ### FAIL
 
-Globals are conflicting because everything is running in the same `window` scope
+![](./screenshots/globals.png)
 
-![](screenshots/jasmine-ko.png)
+Global variables and functions are conflicting each other.
 
-Should we rename the variables? Will eventually break.
+The scope of a variable declared with var is the enclosing function or, for variables declared outside a function, the global scope (which is bound to the global object).
+
+Behind the scene, everything has been attached to the `window` object.
+
+Only functions define scope, files or code blocks (like `if`, `for`, `do`, ...) does not.
+
+- - -
+
+### Hoisting
+Variables are automatically hoisted to the beginning of the scope
+
+```js
+variable = 20;
+var variable = 20;
+window.variable = 20; // all the same;
+
+function outer() {
+
+  function inner() {
+    var variable = 10;
+    console.log('Inner value is ' + variable); // 10
+  }
+  inner();
+
+  console.log('Outer value is ' + variable); // undefined
+  if (true) {
+    var variable = 30;
+    console.log('Block value is ' + variable); // 30
+  }
+  console.log('Final value is ' + variable); // 30
+}
+outer();
+```
+
+
+### What did javascript do?
+
+```js
+window.variable = 20;
+window.variable = 20;
+window.variable = 20;
+
+function outer() {
+  var variable;
+
+  function inner() {
+    var variable = 10;
+    console.log('Inner is ' + variable); // 10
+  }
+  inner();
+
+  console.log('First outer is ' + variable); // undefined
+
+  if (true) {
+    variable = 30;
+    console.log('Block is ' + variable); // 30
+  }
+  console.log('Final outer is ' + variable); // 30
+}
+outer();
+```
+
+
+### Douglas Crackford's one var per function rule
+
+This is a highly controversial and debated rule supported by `jshint` and `jslint`.
+
+The rule enforces the developer to make this behavior explicit and prevents to mix variable definition with code.
+
+```js
+var i,
+    values = this._parameters[key],
+    encodedKey = this._rfc3986.encode(key),
+    encodedValue;
+values.sort();
+for (i = 0; i < values.length; i++) {
+    encodedValue = this._rfc3986.encode(values[i]);
+    this._normalizedParameters.push(encodedKey + '=' + encodedValue)
+}
+```
+
+- - -
+
+### Let
+
+let: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let
+Declares a block scope local variable, optionally initializing it to a value.
+
+- - -
+
+### The object literal
+
+- - -
+
+### The module pattern
 
 - - -
 
