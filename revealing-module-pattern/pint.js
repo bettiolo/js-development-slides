@@ -1,13 +1,13 @@
 window.pint = (function () {
 	'use strict';
 
-	var _quantity = 0; // Fl. oz
+	var _quantity = 0; // private variable
 
-	function fill() {
+	function fill() { // private method
 		_quantity = 20;
 	}
 
-	function consume(quantityToConsume) {
+	function consume(quantityToConsume) { // private method
 		if (_quantity <= 0) {
 			return;
 		}
@@ -18,8 +18,11 @@ window.pint = (function () {
 		}
 	}
 
-	fill();
+	fill(); // some behaviour
 
+	// we return an object literal that acts as a closure
+	// after returning, the stack-frame is not destroyed (like in C)
+	// a copy of the outer function is captured
 	return {
 		drink: function () {
 			consume(1);
