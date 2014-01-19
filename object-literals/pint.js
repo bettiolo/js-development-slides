@@ -1,3 +1,4 @@
+// this is an IIFE,
 (function () {
 	'use strict';
 
