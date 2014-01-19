@@ -1,4 +1,3 @@
-// glass.js
 window.Pub = (function (Pub) {
 	'use strict';
 
@@ -34,43 +33,32 @@ window.Pub = (function (Pub) {
 		return this._quantity;
 	};
 
-	Pub.Glass = Glass; // Populate the namespace
-	return Pub;
-
-}(window.Pub || {}));
-
-// pint.js
-window.Pub = (function (Pub) {
-	'use strict';
 
 	// The inheriting class constructor
 	function Pint() {
 		// Call the base class constructor
-		Pub.Glass.call(this, 20);
+		Glass.call(this, 20);
 	}
 
 	// Inherit Glass
-	Pint.prototype = Object.create(Pub.Glass.prototype);
+	// Supported by Chrome: 5, Firefox 4.0, IE 9, Opera 11.60 and Safari 5
+	// es5-shim for legacy support
+	Pint.prototype = Object.create(Glass.prototype);
 	// Correct the constructor pointer because it points to Glass
 	Pint.prototype.constructor = Pint;
 
 	Pub.Pint = Pint;
-	return Pub;
 
-}(window.Pub || {}));
-
-// halfPint.js
-window.Pub = (function (Pub) {
-	'use strict';
 
 	function HalfPint() {
-		Pub.Glass.call(this, 10);
+		Glass.call(this, 10);
 	}
 
-	HalfPint.prototype = Object.create(Pub.Glass.prototype);
+	HalfPint.prototype = Object.create(Glass.prototype);
 	HalfPint.prototype.constructor = HalfPint;
 
 	Pub.HalfPint = HalfPint;
+
 	return Pub;
 
 }(window.Pub || {}));
