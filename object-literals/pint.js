@@ -1,4 +1,4 @@
-// this is an IIFE,
+// Immediately-Invoked Function Expression (IIFE)
 (function () {
 	'use strict';
 
