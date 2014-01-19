@@ -19,24 +19,32 @@ window.Pub = (function (Pub) {
 		}
 	}
 
+	function drink() {
+		consume(1);
+	}
+
+	function quaff() {
+		consume(4);
+	}
+
+	function downInOne() {
+		consume(_quantity);
+	}
+
+	function getQuantity() {
+		return _quantity;
+	}
+
 	fill(); // some behaviour
 
-	// we return an object literal that acts as a closure
-	// after returning, the stack-frame is not destroyed (like in C)
-	// a copy of the outer function is captured
+	// we return an object literal that acts as a closure.
+	// after returning, the stack-frame is not destroyed (as opposed to C)
+	// a copy of the outer function is captured.
 	Pub.pint = {
-		drink: function () {
-			consume(1);
-		},
-		quaff: function () {
-			consume(4);
-		},
-		downInOne: function () {
-			consume(_quantity);
-		},
-		getQuantity: function () {
-			return _quantity;
-		},
+		drink: drink,
+		quaff: quaff,
+		downInOne: downInOne,
+		getQuantity: getQuantity,
 		refill: fill
 	};
 
