@@ -1,4 +1,5 @@
-window.pint = (function () {
+// Pub is our namespace
+window.Pub = (function (Pub) {
 	'use strict';
 
 	var _quantity = 0; // private variable
@@ -23,7 +24,7 @@ window.pint = (function () {
 	// we return an object literal that acts as a closure
 	// after returning, the stack-frame is not destroyed (like in C)
 	// a copy of the outer function is captured
-	return {
+	Pub.pint = {
 		drink: function () {
 			consume(1);
 		},
@@ -36,9 +37,8 @@ window.pint = (function () {
 		getQuantity: function () {
 			return _quantity;
 		},
-		refill: function () {
-			fill();
-		}
+		refill: fill
 	};
 
-})();
+	return Pub;
+}(window.Pub || {}));
