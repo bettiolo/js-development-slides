@@ -31,9 +31,14 @@
 ```js
 var quantity = 20; // Fl. oz.
 
-function consume (consumedQuantity) {
-  if (quantity > 0) {
-    quantity -= consumedQuantity;
+function consume (quantityToConsume) {
+  if (quantity <= 0) {
+    return;
+  }
+  if (quantity > quantityToConsume) {
+    quantity -= quantityToConsume;
+  } else {
+    quantity = 0;
   }
 }
 
@@ -60,9 +65,14 @@ You need to support half pint size
 ```js
 var quantity = 10; // Fl. oz.
 
-function consume (consumedQuantity) {
-  if (quantity > 0) {
-    quantity -= consumedQuantity;
+function consume (quantityToConsume) {
+  if (quantity <= 0) {
+    return;
+  }
+  if (quantity > quantityToConsume) {
+    quantity -= quantityToConsume;
+  } else {
+    quantity = 0;
   }
 }
 
@@ -92,15 +102,34 @@ Behind the scene, everything has been attached to the `window` object.
 
 Only functions define scope, files or code blocks (like `if`, `for`, `do`, ...) does not.
 
+
+
+### Let
+
+Declares a block scope local variable, optionally initializing it to a value.
+
+```js
+for (let i = 0; i<10; i++) {
+  alert(i); // 1, 2, 3, 4 ... 9
+}
+
+alert(i); // i is not defined
+```
+
+Supported by IE 11+, FF 11+ and Chrome 19+
+
 - - -
 
 ### Hoisting
 Variables are automatically hoisted to the beginning of the scope
 
 ```js
+// all the following assignments are the same
+// in other context, like if running in a closure
+// the behavuiour will be different
 variable = 20;
 var variable = 20;
-window.variable = 20; // all the same;
+window.variable = 20;
 
 function outer() {
 
@@ -151,9 +180,9 @@ outer();
 
 ### Douglas Crackford's one var per function rule
 
-This is a highly controversial and debated rule supported by `jshint` and `jslint`.
-
-The rule enforces the developer to make this behavior explicit and prevents to mix variable definition with code.
+Highly controversial and debated rule supported by `jshint` and `jslint`.
+Enforces developers to code in the same way that the code will be executed by
+making this behavior explicit. Love or hate?
 
 ```js
 var i,
@@ -169,16 +198,11 @@ for (i = 0; i < values.length; i++) {
 
 - - -
 
-### Let
-
-let: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let
-Declares a block scope local variable, optionally initializing it to a value.
-
-- - -
-
 ### JsHint
 
-`.jshintrc` to enforce coding style
+Enforces coding style across project and teams
+
+Store the settings in `.jshintrc` file in the root of your project
 
 ```json
 {
