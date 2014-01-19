@@ -6,9 +6,9 @@ window.Pub2 = (function (Pub) {
 	 * @param {number} quantity The quantity of liquid in the glass in fl. oz.
 	 * @abstract
 	 */
-	var Glass = function (quantity) { // Base class constructor
+	var Glass = function (quantity) {
 		/** @private */
-		this._quantity = quantity; // Private by convention
+		this._quantity = quantity;
 	};
 
 	/**
@@ -47,25 +47,19 @@ window.Pub2 = (function (Pub) {
 	 * @constructor
 	 * @extends {Glass}
 	 */
-		// The inheriting class constructor
 	function Pint() {
-		// Call the base class constructor
 		Glass.call(this, 20);
 	}
 
-	// Inherit Glass
-	// Supported by Chrome: 5, Firefox 4.0, IE 9, Opera 11.60 and Safari 5
-	// es5-shim for legacy support
 	Pint.prototype = Object.create(Glass.prototype);
-	// Correct the constructor pointer because it points to Glass
 	Pint.prototype.constructor = Pint;
 
 	Pub.Pint = Pint;
 
-//	/**
-//	 * @constructor
-//	 * @extends {Glass}
-//	 */
+	/**
+	 * @constructor
+	 * --@extends {Glass}
+	 */
 	function HalfPint() {
 		Glass.call(this, 10);
 	}
