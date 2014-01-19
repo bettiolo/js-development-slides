@@ -1,9 +1,13 @@
-var capacity = 10; // Fl. oz.
 var quantity = 10; // Fl. oz.
 
-function consume (consumedQuantity) {
-	if (quantity > 0) {
-		quantity -= consumedQuantity;
+function consume (quantityToConsume) {
+	if (quantity <= 0) {
+		return;
+	}
+	if (quantity > quantityToConsume) {
+		quantity -= quantityToConsume;
+	} else {
+		quantity = 0;
 	}
 }
 
