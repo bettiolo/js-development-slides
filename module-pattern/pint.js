@@ -22,8 +22,6 @@ window.Pub = (function (Pub) {
 
 	fill();
 
-	Pub.pint = pint;
-
 	// the following functions capture a copy
 	// of the outer function
 	pint.drink = function () {
@@ -41,6 +39,8 @@ window.Pub = (function (Pub) {
 	pint.refill = function () {
 		fill();
 	};
+
+	Pub.pint = pint;
 	return Pub;
 
 }(window.Pub || {}));
