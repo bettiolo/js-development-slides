@@ -96,7 +96,8 @@ function downInOne() {
 
 Global variables and functions are conflicting each other.
 
-The scope of a variable declared with var is the enclosing function or, for variables declared outside a function, the global scope (which is bound to the global object).
+The scope of a variable declared with var is the enclosing function or, 
+for variables declared outside a function, the global scope (which is bound to the global object).
 
 Behind the scene, everything has been attached to the `window` object.
 
@@ -121,12 +122,12 @@ Supported by IE 11+, FF 11+ and Chrome 19+
 - - -
 
 ### Hoisting
-Variables are automatically hoisted to the beginning of the scope
+Variables are automatically hoisted to the beginning of the scope regardless of where
+they are defined.
 
 ```js
-// all the following assignments are the same
-// in other context, like if running in a closure
-// the behavuiour will be different
+// all the following assignments are the same in the global context
+// if running in a closure the behaviour will be different
 variable = 20;
 var variable = 20;
 window.variable = 20;
@@ -176,6 +177,18 @@ function outer() {
 }
 outer();
 ```
+
+
+### Strict mode
+
+`'use strict';` as the first instruction in a file or in a function scope.
+
+Strict mode changes both syntax and runtime behavior. Changes generally fall into these categories: changes converting mistakes into errors (as syntax errors or at runtime), changes simplifying how the particular variable for a given use of a name is computed, changes simplifying eval and arguments, changes making it easier to write "secure" JavaScript, and changes anticipating future ECMAScript evolution.
+
+Makes JS development more sane, for example, accidental definition of global variables throws `ReferenceError`.
+
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions_and_function_scope/Strict_mode
+
 
 
 ### Douglas Crackford's one var per function rule
@@ -241,7 +254,27 @@ Store the settings in `.jshintrc` file in the root of your project
 
 ### Closures
 
-Used to shield from leaking variables to global object
+A closure is a special kind of object that combines two things: a function, and the environment in which that function was created.
+The environment consists of any local variables that were in-scope at the time that the closure was created.
+
+```js
+function outer() {
+  'use strict';
+  var outerVariable = 10;
+
+  function inner() {
+    var innerVariable = 20;
+    console.log('Outer Variable from Inner: ' + outerVariable);
+    console.log('Inner Variable from Inner: ' + innerVariable);
+  }
+  console.log('Outer Variable from Outer: ' + outerVariable);
+  console.log('Inner Variable from Outer: ' + (typeof innerVariable));
+  return inner;
+}
+var inner = outer();
+// ... later
+inner();
+```
 
 - - -
 
