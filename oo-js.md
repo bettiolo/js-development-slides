@@ -1,22 +1,26 @@
 # Object Oriented Javascript
 
-### Marco Bettiolo
-- marco@bettiolo.it
-- @bettiolo
-- bettiolo.it
+## Marco Bettiolo
+
+marco@bettiolo.it
+
+@bettiolo
+
+http://bettiolo.it
 
 - - -
 
-## Topics
+### Topics
 
-- [Scope & conflicts](#/scope)
+- Back to the past
 - Hoisting
-- Let keyword
-- Object literals
+- Avoiding pitfalls
+- Closures
+- Object literal
 - Module pattern
-- Objects
+- Revealing module pattern
+- Classic objects
 - Prototypal inheritance
-- Parent object access
 - JsDoc
 - CoffeeScript
 - TypeScript
@@ -198,11 +202,11 @@ Makes JS development more sane, for example, accidental definition of global var
 - Changes anticipating future ECMAScript evolution
 
 
-### Douglas Crackford's one var per function rule
+### Douglas Crockford's one var per function rule
 
 Highly controversial and debated rule supported by `jshint` and `jslint`.
 Enforces developers to code in the same way that the code will be executed by
-making this behavior explicit. Love or hate?
+making this behavior explicit.
 
 ```js
 var i,
@@ -260,7 +264,7 @@ Can be automated via grunt to provide constant feedback.
 
 ### Closures
 
-Functions can access parent scopes. Parent function cannot access inner scopes. This is used to structure code and to prevent global object pollution.
+Functions can access parent scopes. Parent function cannot access inner scopes. We can use this rules to structure code and to prevent global object pollution.
 
 ```js
 function outer() {
@@ -539,9 +543,9 @@ var pint = new window.Pub.Pint();
 pint.drink();
 ```
 
-The `new` keyword creates a new object that inherits from function's prototype. `this` is bound to the newly created object's instance.
+The `new` keyword creates a new object that inherits from Pint's prototype. `this` is bound to the newly created object's instance.
 
-There is only one prototype object per 'class'. The methods attached to it are not recreated for each instance saving up memory and speeding things up.
+There is only one prototype object with a varying context for all the instances. This saves memory and speeds things up compared to the other patterns.
 
 - - -
 
@@ -592,6 +596,8 @@ window.Pub = (function (Pub) {
     return this._quantity;
   };
 
+  Pub.Glass = Glass;
+
   // The specialized class constructor
   function Pint() {
     // Call the base class constructor
@@ -626,27 +632,298 @@ Usage:
 ```js
 var pint = new window.Pub.Pint();
 pint.drink();
+
+pint instanceof window.Pub.Pint // TRUE
+pint instanceof window.Pub.Glass // TRUE
+pint instanceof window.Pub.HalfPint // FALSE
+pint instanceof Object // TRUE
 ```
 
 JavaScript will go up the prototype chain to find the `drink()` method.
 First, it will look on Pint object's prototype. Then it will look on Glass and find the method.
 
-- - -
-
-### JsDoc3
-
-documents JavaScript and enriches editor's intellisense
-
-supported by editors like WebStorm, Sublime Text and others
-
-## SCREENSHOTS [...]
+`instanceof` will check that the instance's proptotype match, if not will go up the prototype chain to Object.
 
 - - -
+
+### JsDoc
+
+Documents JavaScript and enriches editor's intellisense
+Supported by editors like WebStorm, Sublime Text and others
+
+```js
+window.Pub2 = (function (Pub) {
+  'use strict';
+
+  /**
+   * @constructor
+   * @param {number} quantity The quantity of liquid in the glass in fl. oz.
+   * @abstract
+   */
+  var Glass = function (quantity) {
+    /** @private */
+    this._quantity = quantity;
+  };
+
+  /**
+   * @param {number} quantityToConsume How much liquid to consumed in fl. oz.
+   * @private
+   */
+  Glass.prototype._consume = function (quantityToConsume) {
+    if (this._quantity <= 0) {
+      return;
+    }
+    if (this._quantity > quantityToConsume) {
+      this._quantity -= quantityToConsume;
+    } else {
+      this._quantity = 0;
+    }
+  };
+
+  Glass.prototype.drink = function () {
+    this._consume(1);
+  };
+
+  Glass.prototype.quaff = function () {
+    this._consume(4);
+  };
+
+  Glass.prototype.downInOne = function () {
+    this._consume(this._quantity);
+  };
+
+  /** @returns {number} Quantity in fl. oz. */
+  Glass.prototype.getQuantity = function () {
+    return this._quantity;
+  };
+
+  /**
+   * @constructor
+   * @extends {Glass}
+   */
+  function Pint() {
+    Glass.call(this, 20);
+  }
+
+  Pint.prototype = Object.create(Glass.prototype);
+  Pint.prototype.constructor = Pint;
+
+  Pub.Pint = Pint;
+
+  /**
+   * @constructor
+   * --@extends {Glass}
+   */
+  function HalfPint() {
+    Glass.call(this, 10);
+  }
+
+  HalfPint.prototype = Object.create(Glass.prototype);
+  HalfPint.prototype.constructor = HalfPint;
+
+  Pub.HalfPint = HalfPint;
+
+  return Pub;
+
+}(window.Pub2 || {}));
+```
+
+
+### JsDoc
+
+Intellisense
+
+![](screenshots/jsdoc-intellisense.png)
+
+Parameter help
+
+![](screenshots/jsdoc-parameter-help.png)
+
+
+### JsDoc
+
+Documentation
+
+![](screenshots/jsdoc-documentation.png)
+
+
+### JsDoc
+
+Parameter checking
+
+![](screenshots/jsdoc-parameter-checking.png)
+
+- - -
+
+### CoffeeScript
+
+```coffeescript
+window.Pub = ((Pub) ->
+
+  class Glass
+    constructor: (quantity) ->
+      @_quantity = quantity # Instance field private by convention
+
+    _consume: (quantityToConsume) ->
+      return if @_quantity <= 0
+      if (@_quantity > quantityToConsume)
+        @_quantity -= quantityToConsume
+      else
+        @_quantity = 0
+
+    drink: () ->
+      @_consume(1)
+
+    quaff: () ->
+      @_consume(4)
+
+    downInOne: () ->
+      @_consume(@_quantity)
+
+    getQuantity: () ->
+      return @_quantity
+
+  class Pint extends Glass
+    constructor: () ->
+      super(20)
+
+  Pub.Pint = Pint
+
+  class HalfPint extends Glass
+    constructor: () ->
+      super(10)
+
+  Pub.HalfPint = HalfPint
+
+  return Pub
+)(window.Pub or {})
+```
+
+- - - 
+
+### TypeScript
+
+```typescript
+window.Pub = ((Pub) ->
+
+  class Glass
+    constructor: (quantity) ->
+      @_quantity = quantity # Instance field private by convention
+
+    _consume: (quantityToConsume) ->
+      return if @_quantity <= 0
+      if (@_quantity > quantityToConsume)
+        @_quantity -= quantityToConsume
+      else
+        @_quantity = 0
+
+    drink: () ->
+      @_consume(1)
+
+    quaff: () ->
+      @_consume(4)
+
+    downInOne: () ->
+      @_consume(@_quantity)
+
+    getQuantity: () ->
+      return @_quantity
+
+  class Pint extends Glass
+    constructor: () ->
+      super(20)
+
+  Pub.Pint = Pint
+
+  class HalfPint extends Glass
+    constructor: () ->
+      super(10)
+
+  Pub.HalfPint = HalfPint
+
+  return Pub
+)(window.Pub or {})
+```
+
+- - -
+
+### EcmaScript Harmony
+
+```js
+window.Pub = (function (Pub) {
+  'use strict';
+
+  class Glass {
+    constructor(quantity) {
+      this._quantity = quantity;
+    }
+
+    _consume(quantityToConsume) {
+      if (this._quantity <= 0) {
+        return;
+      }
+      if (this._quantity > quantityToConsume) {
+        this._quantity -= quantityToConsume;
+      } else {
+        this._quantity = 0;
+      }
+    }
+
+    drink() {
+      this._consume(1);
+    }
+
+    quaff() {
+      this._consume(4);
+    }
+
+    downInOne() {
+      this._consume(this._quantity);
+    }
+
+    getQuantity() {
+      return this._quantity;
+    }
+
+  }
+
+  class Pint extends Glass {
+    constructor() {
+      super(20);
+    }
+  }
+
+  Pub.Pint = Pint;
+
+  class HalfPint extends Glass {
+    constructor() {
+      super(10);
+    }
+  }
+
+  Pub.HalfPint = HalfPint;
+
+  return Pub;
+
+}(window.Pub || {}));
+```
+
+A long way to go but can be transpiled with Google Traceur
+
+- - - 
 
 ### Other tools
 - CommonJs
-- AMD with RequireJs
+- AMD with RequireJS
 - jQuery
 - [...]
 
+- - -
+
 # Questions?
+
+marco@bettiolo.it
+
+@bettiolo
+
+http://bettiolo.it
