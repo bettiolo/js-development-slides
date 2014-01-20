@@ -15,7 +15,9 @@ http://bettiolo.it
 
 7digital simplifies access to the world's music.
 
-We have licensing relationships with international music labels and publishers, bringing our catalogue to over 25 million tracks. More than 250 partners across the globe currently use 7digital's music rights and technology available via our API's.
+- Licensing relationships with international music labels and publishers
+- 25 million tracks
+- More than 250 partners across the globe, including:
 
 ![](screenshots/7d-partners.png)
 
