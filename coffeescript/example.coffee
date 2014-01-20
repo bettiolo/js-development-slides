@@ -23,14 +23,12 @@ window.Pub = ((Pub) ->
     getQuantity: () ->
       return @_quantity
 
-  # FILE: pint.js
   class Pint extends Glass
     constructor: () ->
       super(20)
 
   Pub.Pint = Pint
 
-  # FILE: halfpint.js
   class HalfPint extends Glass
     constructor: () ->
       super(10)
