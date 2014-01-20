@@ -2,11 +2,22 @@
 
 ## Marco Bettiolo
 
+API Developer at 7digital
+
 marco@bettiolo.it
 
 @bettiolo
 
 http://bettiolo.it
+
+
+![](screenshots/7digital.png)
+
+7digital simplifies access to the world's music.
+
+We have licensing relationships with international music labels and publishers, bringing our catalogue to over 25 million tracks. More than 250 partners across the globe currently use 7digital's music rights and technology available via our API's.
+
+![](screenshots/7d-partners.png)
 
 - - -
 
@@ -96,7 +107,7 @@ function downInOne() {
 
 ### FAIL
 
-![](./screenshots/globals.png)
+![](screenshots/globals.png)
 
 Global variables and functions are conflicting each other.
 
@@ -821,61 +832,65 @@ window.Pub = ((Pub) ->
 
 ### TypeScript
 
-```typescript
+(Sorry for the formatting)
+
+```
 module Pub {
-    export class Glass {
-        private _quantity : number; // this is not really enforced
+  export class Glass {
+    private _quantity : number; // this is not really enforced
 
-        constructor (quantity : number) {
-            this._quantity = quantity;
-        }
-
-        private _consume(quantityToConsume : number) : void {
-            if (this._quantity <= 0) {
-                return;
-            }
-            if (this._quantity > quantityToConsume) {
-                this._quantity -= quantityToConsume
-            } else {
-                this._quantity = 0
-            }
-        }
-
-        public drink() : void {
-            this._consume(1);
-        }
-
-        public quaff() : void {
-            this._consume(4);
-        }
-
-        public downInOne() : void {
-            this._consume(this._quantity);
-        }
-
-        public getQuantity() : number {
-            return this._quantity;
-        }
+    constructor (quantity : number) {
+      this._quantity = quantity;
     }
 
-    export class Pint extends Glass {
-        constructor () {
-            super(20);
-        }
+    private _consume(quantityToConsume : number) : void {
+      if (this._quantity <= 0) {
+        return;
+      }
+      if (this._quantity > quantityToConsume) {
+        this._quantity -= quantityToConsume
+      } else {
+        this._quantity = 0
+      }
     }
 
-    export class HalfPint extends Glass {
-        constructor () {
-            super(10);
-        }
+    public drink() : void {
+      this._consume(1);
     }
+
+    public quaff() : void {
+      this._consume(4);
+    }
+
+    public downInOne() : void {
+      this._consume(this._quantity);
+    }
+
+    public getQuantity() : number {
+      return this._quantity;
+    }
+  }
+
+  export class Pint extends Glass {
+    constructor () {
+      super(20);
+    }
+  }
+
+  export class HalfPint extends Glass {
+    constructor () {
+      super(10);
+    }
+  }
 }
 ```
 
 
 ### TypeScript
 
-Changing `this._consume(1);` to `this._consume("test");` rises:
+Changing `this._consume(1);` 
+
+to `this._consume("test");` rises:
 
 error TS2082: Supplied parameters do not match any signature of call target:
     Could not apply type 'number' to argument 1 which is of type 'string'.
@@ -883,7 +898,7 @@ error TS2082: Supplied parameters do not match any signature of call target:
 
 ### TypeScript
 
-Trying to call consume from a specialized class rises:
+Trying to call `this._consume(1);` from a specialized class rises:
 
 error TS2107: 'Pub.Glass._consume' is inaccessible.
 
