@@ -58,7 +58,7 @@ window.Pub2 = (function (Pub) {
 
 	/**
 	 * @constructor
-	 * --@extends {Glass}
+	 * @extends {Glass}
 	 */
 	function HalfPint() {
 		Glass.call(this, 10);
