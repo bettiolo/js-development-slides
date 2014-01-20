@@ -1,9 +1,9 @@
 window.Pub = (function (Pub) {
 	'use strict';
 
-	var Glass = function (quantity) { // Base class constructor
+	function Glass(quantity) { // Base class constructor
 		this._quantity = quantity; // Private by convention
-	};
+	}
 
 	// Private by convention
 	Glass.prototype._consume = function (quantityToConsume) {
@@ -33,8 +33,7 @@ window.Pub = (function (Pub) {
 		return this._quantity;
 	};
 
-
-	// The inheriting class constructor
+	// The specialized class constructor
 	function Pint() {
 		// Call the base class constructor
 		Glass.call(this, 20);
@@ -48,7 +47,6 @@ window.Pub = (function (Pub) {
 	Pint.prototype.constructor = Pint;
 
 	Pub.Pint = Pint;
-
 
 	function HalfPint() {
 		Glass.call(this, 10);
