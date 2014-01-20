@@ -2,14 +2,20 @@
 describe('Half Pint', function () {
 	'use strict';
 
-	var pint;
+	var halfPint;
 
 	beforeEach(function () {
-		pint = new window.Pub.HalfPint();
+		halfPint = new window.Pub.HalfPint();
 	});
 
 	it('Contains 10 fl. oz. of beer', function () {
-		expect(pint.getQuantity()).toEqual(10);
+		expect(halfPint.getQuantity()).toEqual(10);
+	});
+
+	it('Is an instance of Pint and Glass', function () {
+		expect(halfPint instanceof window.Pub.HalfPint).toBeTruthy();
+		expect(halfPint instanceof window.Pub.Glass).toBeTruthy();
+		expect(halfPint instanceof window.Pub.Pint).toBeFalsy();
 	});
 
 });
@@ -17,42 +23,42 @@ describe('Half Pint', function () {
 describe('Half Pint Customer', function () {
 	'use strict';
 
-	var pint;
+	var halfPint;
 
 	beforeEach(function () {
-		pint = new window.Pub.HalfPint();
+		halfPint = new window.Pub.HalfPint();
 	});
 
 	it('Drinks, 1 fl. oz. is consumed', function () {
-		pint.drink();
-		expect(pint.getQuantity()).toEqual(9);
+		halfPint.drink();
+		expect(halfPint.getQuantity()).toEqual(9);
 	});
 
 	it('Quaffs, 4 fl. oz. are consumed', function () {
-		pint.quaff();
-		expect(pint.getQuantity()).toEqual(6);
+		halfPint.quaff();
+		expect(halfPint.getQuantity()).toEqual(6);
 	});
 
 	it('Drinks and then downs in one, there remaining beer is consumed', function () {
-		pint.drink();
-		pint.downInOne();
-		expect(pint.getQuantity()).toEqual(0);
+		halfPint.drink();
+		halfPint.downInOne();
+		expect(halfPint.getQuantity()).toEqual(0);
 	});
 
 	it('Cannot drink more beer than the one available in the glass', function () {
-		pint.drink();
-		pint.quaff();
-		pint.quaff();
-		pint.quaff();
-		pint.quaff();
-		pint.quaff();
-		expect(pint.getQuantity()).toEqual(0);
+		halfPint.drink();
+		halfPint.quaff();
+		halfPint.quaff();
+		halfPint.quaff();
+		halfPint.quaff();
+		halfPint.quaff();
+		expect(halfPint.getQuantity()).toEqual(0);
 	});
 
 	it('Can drink and quaff', function () {
-		pint.drink();
-		pint.quaff();
-		expect(pint.getQuantity()).toEqual(5);
+		halfPint.drink();
+		halfPint.quaff();
+		expect(halfPint.getQuantity()).toEqual(5);
 	});
 
 });

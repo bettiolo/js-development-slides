@@ -12,6 +12,13 @@ describe('Pint', function () {
 		expect(pint.getQuantity()).toEqual(20);
 	});
 
+	it('Is an instance of Pint and Glass', function () {
+		expect(pint instanceof window.Pub.Pint).toBeTruthy();
+		expect(pint instanceof window.Pub.Glass).toBeTruthy();
+		expect(pint instanceof Object).toBeTruthy();
+		expect(pint instanceof window.Pub.HalfPint).toBeFalsy();
+	});
+
 });
 
 describe('Pint Customer', function () {

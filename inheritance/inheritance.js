@@ -33,6 +33,8 @@ window.Pub = (function (Pub) {
 		return this._quantity;
 	};
 
+	Pub.Glass = Glass;
+
 	// The specialized class constructor
 	function Pint() {
 		// Call the base class constructor
