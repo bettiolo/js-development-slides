@@ -14,8 +14,8 @@ http://bettiolo.it
 
 - Back to the past
 - Hoisting
-- Avoiding pitfalls
-- Closures
+- Avoiding common pitfalls
+- Closures & IIFE
 - Object literal
 - Module pattern
 - Revealing module pattern
@@ -100,27 +100,12 @@ function downInOne() {
 
 Global variables and functions are conflicting each other.
 
-The scope of a variable declared with var is the enclosing function or, 
+The scope of a variable declared with `var` is the enclosing function or, 
 for variables declared outside a function, the global scope (which is bound to the global object).
 
 Behind the scene, everything has been attached to the `window` object.
 
 Only functions define scope, files or code blocks (like `if`, `for`, `do`, ...) does not.
-
-
-### Let
-
-Declares a block scope local variable, optionally initializing it to a value.
-
-```js
-for (let i = 0; i<10; i++) {
-  alert(i); // 1, 2, 3, 4 ... 9
-}
-
-alert(i); // i is not defined
-```
-
-Supported by IE 11+, FF 11+ and Chrome 19+
 
 - - -
 
@@ -195,18 +180,15 @@ Changes both syntax and runtime behavior.
 
 Makes JS development more sane, for example, accidental definition of global variables throws `ReferenceError`.
 
-- Changes converting mistakes into errors (as syntax errors or at runtime)
-- Changes simplifying how the particular variable for a given use of a name is computed,
-- Changes simplifying eval and arguments
-- Changes making it easier to write "secure" JavaScript
-- Changes anticipating future ECMAScript evolution
+- Catches some common coding bloopers, throwing exceptions.
+- Prevents, or throws errors, when relatively "unsafe" actions are taken (such as gaining access to the global object).
+- Disables features that are confusing or poorly thought out.
 
 
 ### Douglas Crockford's one var per function rule
 
 Highly controversial and debated rule supported by `jshint` and `jslint`.
-Enforces developers to code in the same way that the code will be executed by
-making this behavior explicit.
+Makes this behaviour explicit and enforces developers to think in the same way that the code will be executed.
 
 ```js
 var i,
@@ -260,11 +242,26 @@ Store the settings in `.jshintrc`
 
 Can be automated via grunt to provide constant feedback.
 
+
+### Let
+
+Declares a block scope local variable, optionally initializing it to a value.
+
+```js
+for (let i = 0; i<10; i++) {
+  alert(i); // 1, 2, 3, 4 ... 9
+}
+
+alert(i); // i is not defined
+```
+
+Supported by IE 11+, FF 11+ and Chrome 19+
+
 - - -
 
 ### Closures
 
-Functions can access parent scopes. Parent function cannot access inner scopes. We can use this rules to structure code and to prevent global object pollution.
+Inner functions can access outer context. Outer function cannot access inner context. We can use this rules to structure code and to prevent global object pollution.
 
 ```js
 function outer() {
@@ -298,7 +295,7 @@ The environment consists of any local variables that were in-scope at the time t
 
 ### Closures
 
-Changing the variables in the outer scope of one closure does not affect the other.
+Changing the variables in the outer scope of one closure does not affect the other because each closure has it's own copy of the context.
 
 ![](screenshots/closure-output.png)
 
@@ -313,6 +310,8 @@ Changing the variables in the outer scope of one closure does not affect the oth
 
 })();
 ```
+
+In JavaScript, every function, when invoked, creates a new execution context. Because variables and functions defined within a function may only be accessed inside, but not outside, that context, invoking a function provides a very easy way to create privacy.
 
 - - -
 
