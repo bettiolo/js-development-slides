@@ -116,7 +116,7 @@ for (let i = 0; i<10; i++) {
 alert(i); // i is not defined
 ```
 
-Supported by IE 11+, FF 11+ and Chrome 19+ and available in EcmaScript 6
+Supported by IE 11+, FF 11+ and Chrome 19+
 
 - - -
 
@@ -541,160 +541,95 @@ pint.drink();
 
 The `new` keyword creates a new object that inherits from function's prototype. `this` is bound to the newly created object's instance.
 
-- - -
-
-### Prototypal Inheritance
-
-We have too much duplicated logic.
-
-- JavaScript is a prototypal language, the `prototype` property is available on each function
-
-- We can use the `prototype` to scaffold a class and a constructor to create an instance
-
-- We can also inherit anoter object's `prototype`
+There is only one prototype object per 'class'. The methods attached to it are not recreated for each instance saving up memory and speeding things up.
 
 - - -
 
-### Prototypal Inheritance
+### Prototypal inheritance
+
+JavaScript's programming model is a class-less, prototype-oriented or instance-based programming.
+
+Prototypes are objects. To achieve inheritance we need to set-up a prototype chain. We can decorate and redefine properties.
+
+
+### Prototypal inheritance
 
 Pint and HalfPint inherits from 'abstract' Glass
 
 ```js
-var Glass = function () { // This will be our base class
+window.Pub = (function (Pub) {
   'use strict';
 
-  function Glass(capacity) {
-    this.quantity = 0; // Instance property
-    this.capacity = capacity; // Instance property
-  }
+  function Glass(quantity) { // Base class constructor
+    this._quantity = quantity; // Private by convention
+  };
 
-  // Ensure the constructor is correct
-  Glass.prototype.constructor = Glass;
-
-  Glass.prototype.consume = function (consumedQuantity) {
-    if (this.quantity > 0) {
-      this.quantity -= consumedQuantity;
+  // Private by convention
+  Glass.prototype._consume = function (quantityToConsume) {
+    if (this._quantity <= 0) {
+      return;
+    }
+    if (this._quantity > quantityToConsume) {
+      this._quantity -= quantityToConsume;
+    } else {
+      this._quantity = 0;
     }
   };
 
   Glass.prototype.drink = function () {
-    this.consume(1);
+    this._consume(1);
   };
 
   Glass.prototype.quaff = function () {
-    this.consume(4);
+    this._consume(4);
   };
 
   Glass.prototype.downInOne = function () {
-    this.consume(this.quantity);
+    this._consume(this._quantity);
   };
 
-  // Return the constructor
-  return Glass;
+  Glass.prototype.getQuantity = function () {
+    return this._quantity;
+  };
 
-}(); // Immediately-Invoked Function Expression (IIFE)
-
-var Pint = function () {
-  'use strict';
-
+  // The specialized class constructor
   function Pint() {
-    Glass.call(this, 20); // Pint size in fl. oz.
-    this.quantity = 20; // Pint size in fl. oz.
+    // Call the base class constructor
+    Glass.call(this, 20);
   }
 
-  // Inherit the base class, available in ES5
   Pint.prototype = Object.create(Glass.prototype);
-
-  // Ensure the constructor is correct
+  // Correct the constructor pointer because it points to Glass
   Pint.prototype.constructor = Pint;
 
-  return Pint;
-}();
-
-var HalfPint = function () {
-  'use strict';
+  Pub.Pint = Pint;
 
   function HalfPint() {
-    Glass.call(this, 10); // Half Pint size in fl. oz.
-    this.quantity = 10; // Half Pint size in fl. oz.
+    Glass.call(this, 10);
   }
 
   HalfPint.prototype = Object.create(Glass.prototype);
-
   HalfPint.prototype.constructor = HalfPint;
 
-  return HalfPint;
-}();
+  Pub.HalfPint = HalfPint;
+  
+  return Pub;
+
+}(window.Pub || {}));
 ```
 
 
-Let's update the tests to use the `new` keyword
+### Prototypal inheritance
 
-We can now access the 'public' methods and properties of the base class
+Usage: 
 
 ```js
-describe('Pint', function () {
-  'use strict';
-  
-  var pint;
-
-  beforeEach(function () {
-    pint = new Pint();
-  });
-
-  it('Contains 20 fl. oz. of beer', function () {
-    expect(pint.quantity).toEqual(20);
-  });
-
-  it('Has 20 fl. oz. of capacity', function () {
-    expect(pint.capacity).toEqual(20);
-  });
-});
-
-describe('Pint Customer', function () {
-  'use strict';
-  
-  var pint;
-
-  beforeEach(function () {
-    pint = new Pint();
-  });
-
-  it('Drinks, 1 fl. oz. is consumed', function () {
-    pint.drink();
-    expect(pint.quantity).toEqual(19);
-  });
-
-  it('Quaffs, 4 fl. oz. are consumed', function () {
-    pint.quaff();
-    expect(pint.quantity).toEqual(16);
-  });
-
-  it('Drinks and then downs in one, the remaining beer is consumed', function () {
-    pint.drink();
-    pint.downInOne();
-    expect(pint.quantity).toEqual(0);
-  });
-
-  it('Cannot drink from a beer that has already been consumed', function () {
-    pint.downInOne();
-    pint.drink();
-    expect(pint.quantity).toEqual(0);
-  });
-
-  it('Cannot quaff from a beer that has already been consumed', function () {
-    pint.downInOne();
-    pint.quaff();
-    expect(pint.quantity).toEqual(0);
-  });
-
-});
+var pint = new window.Pub.Pint();
+pint.drink();
 ```
 
-
-Results
-
-![](screenshots/jasmine-inheritance-ok.png)
+JavaScript will go up the prototype chain to find the `drink()` method.
+First, it will look on Pint object's prototype. Then it will look on Glass and find the method.
 
 - - -
 
