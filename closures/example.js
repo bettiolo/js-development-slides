@@ -3,6 +3,7 @@ function outer() {
 	var outerVariable = 10;
 
 	function inner() {
+		outerVariable++;
 		var innerVariable = 20;
 		console.log('Outer Variable from Inner: ' + outerVariable);
 		console.log('Inner Variable from Inner: ' + innerVariable);
@@ -11,6 +12,9 @@ function outer() {
 	console.log('Inner Variable from Outer: ' + (typeof innerVariable));
 	return inner;
 }
-var inner = outer();
+var innerCopy1 = outer();
+var innerCopy2 = outer();
 // ... later
-inner();
+innerCopy2();
+innerCopy2();
+innerCopy1();
