@@ -302,6 +302,18 @@ Changing the variables in the outer scope of one closure does not affect the oth
 
 ![](screenshots/closure-output.png)
 
+
+### Immediately-Invoked Function Expression (IIFE)
+
+```js
+(function () {
+  'use strict';
+
+  // Do fancy stuff without leaking vars to the global object;
+
+})();
+```
+
 - - -
 
 ### Object literal
@@ -491,6 +503,8 @@ There is no need to repeat multiple times the name of the class that will be ret
 
 ### Classic JavaScript objects
 
+JavaScript's programming model is a class-less, prototype-oriented or instance-based programming.
+
 ```js
 // Pub is our namespace
 window.Pub = (function (Pub) {
@@ -551,8 +565,6 @@ There is only one prototype object with a varying context for all the instances.
 
 ### Prototypal inheritance
 
-JavaScript's programming model is a class-less, prototype-oriented or instance-based programming.
-
 Prototypes are objects. To achieve inheritance we need to set-up a prototype chain. We can decorate and redefine properties.
 
 
@@ -564,7 +576,7 @@ Pint and HalfPint inherits from 'abstract' Glass
 window.Pub = (function (Pub) {
   'use strict';
 
-  function Glass(quantity) { // Base class constructor
+  function Glass(quantity) { // Base constructor
     this._quantity = quantity; // Private by convention
   };
 
@@ -598,9 +610,9 @@ window.Pub = (function (Pub) {
 
   Pub.Glass = Glass;
 
-  // The specialized class constructor
+  // The specialized constructor
   function Pint() {
-    // Call the base class constructor
+    // Call the base constructor
     Glass.call(this, 20);
   }
 
@@ -712,7 +724,7 @@ window.Pub2 = (function (Pub) {
 
   /**
    * @constructor
-   * --@extends {Glass}
+   * @extends {Glass}
    */
   function HalfPint() {
     Glass.call(this, 10);
@@ -752,6 +764,13 @@ Documentation
 Parameter checking
 
 ![](screenshots/jsdoc-parameter-checking.png)
+
+
+### JsDoc
+
+Inheritance
+
+![](screenshots/jsdoc-inheritance.png)
 
 - - -
 
@@ -804,46 +823,70 @@ window.Pub = ((Pub) ->
 ### TypeScript
 
 ```typescript
-window.Pub = ((Pub) ->
+module Pub {
+    export class Glass {
+        private _quantity : number; // this is not really enforced
 
-  class Glass
-    constructor: (quantity) ->
-      @_quantity = quantity # Instance field private by convention
+        constructor (quantity : number) {
+            this._quantity = quantity;
+        }
 
-    _consume: (quantityToConsume) ->
-      return if @_quantity <= 0
-      if (@_quantity > quantityToConsume)
-        @_quantity -= quantityToConsume
-      else
-        @_quantity = 0
+        private _consume(quantityToConsume : number) : void {
+            if (this._quantity <= 0) {
+                return;
+            }
+            if (this._quantity > quantityToConsume) {
+                this._quantity -= quantityToConsume
+            } else {
+                this._quantity = 0
+            }
+        }
 
-    drink: () ->
-      @_consume(1)
+        public drink() : void {
+            this._consume(1);
+        }
 
-    quaff: () ->
-      @_consume(4)
+        public quaff() : void {
+            this._consume(4);
+        }
 
-    downInOne: () ->
-      @_consume(@_quantity)
+        public downInOne() : void {
+            this._consume(this._quantity);
+        }
 
-    getQuantity: () ->
-      return @_quantity
+        public getQuantity() : number {
+            return this._quantity;
+        }
+    }
 
-  class Pint extends Glass
-    constructor: () ->
-      super(20)
+    export class Pint extends Glass {
+        constructor () {
+            super(20);
+        }
+    }
 
-  Pub.Pint = Pint
-
-  class HalfPint extends Glass
-    constructor: () ->
-      super(10)
-
-  Pub.HalfPint = HalfPint
-
-  return Pub
-)(window.Pub or {})
+    export class HalfPint extends Glass {
+        constructor () {
+            super(10);
+        }
+    }
+}
 ```
+
+
+### TypeScript
+
+Changing `this._consume(1);` to `this._consume("test");` rises:
+
+error TS2082: Supplied parameters do not match any signature of call target:
+    Could not apply type 'number' to argument 1 which is of type 'string'.
+
+
+### TypeScript
+
+Trying to call consume from a specialized class rises:
+
+error TS2107: 'Pub.Glass._consume' is inaccessible.
 
 - - -
 
@@ -913,10 +956,13 @@ A long way to go but can be transpiled with Google Traceur
 - - - 
 
 ### Other tools
-- CommonJs
+
+- CommonJS
 - AMD with RequireJS
-- jQuery
-- [...]
+- jQuery.extend()
+- Dojo
+
+... and many more
 
 - - -
 
