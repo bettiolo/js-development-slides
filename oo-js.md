@@ -13,7 +13,7 @@ http://bettiolo.it
 
 ![](screenshots/7digital.png)
 
-7digital simplifies access to the world's music.
+### 7digital simplifies access to the world's music.
 
 - Licensing relationships with international music labels and publishers
 - 25 million tracks
