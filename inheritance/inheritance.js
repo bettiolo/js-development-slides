@@ -1,7 +1,7 @@
 window.Pub = (function (Pub) {
 	'use strict';
 
-	function Glass(quantity) { // Base class constructor
+	function Glass(quantity) { // Base constructor
 		this._quantity = quantity; // Private by convention
 	}
 
@@ -35,9 +35,9 @@ window.Pub = (function (Pub) {
 
 	Pub.Glass = Glass;
 
-	// The specialized class constructor
+	// The specialized constructor
 	function Pint() {
-		// Call the base class constructor
+		// Call the base constructor
 		Glass.call(this, 20);
 	}
 
