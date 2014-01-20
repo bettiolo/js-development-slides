@@ -218,13 +218,12 @@ for (i = 0; i < values.length; i++) {
 
 Plus makes SRP violation very clear :)
 
-- - -
 
 ### JsHint
 
 Enforces coding style across project and teams
 
-Store the settings in `.jshintrc` file in the root of your project
+Store the settings in `.jshintrc`
 
 ```json
 {
@@ -255,15 +254,13 @@ Store the settings in `.jshintrc` file in the root of your project
 }
 ```
 
-`npm install -g jshint`
-
-`jshint filename.js`
+Can be automated via grunt to provide constant feedback.
 
 - - -
 
 ### Closures
 
-Functions can access parent scopes.
+Functions can access parent scopes. Parent function cannot access inner scopes. This is used to structure code and to prevent global object pollution.
 
 ```js
 function outer() {
@@ -305,17 +302,244 @@ Changing the variables in the outer scope of one closure does not affect the oth
 
 ### Object literal
 
+```js
+// Immediately-Invoked Function Expression (IIFE)
+(function () {
+  'use strict';
+
+  window.pint = {
+    quantity: 20, // Fl. oz
+    consume: function (quantityToConsume) {
+      if (this.quantity <= 0) {
+        return;
+      }
+      if (this.quantity > quantityToConsume) {
+        this.quantity -= quantityToConsume;
+      } else {
+        this.quantity = 0;
+      }
+    },
+    drink: function () {
+      this.consume(1);
+    },
+    quaff: function () {
+      this.consume(4);
+    },
+    downInOne: function () {
+      this.consume(this.quantity);
+    }
+  };
+
+})();
+```
+We can access our object like: `[window.]pint.drink();`
+
+
+### Object literal
+
+Is a list of zero or more pairs of property names and associated values of an object, enclosed in curly braces ({}).
+Numeric or string literal can be used for the name of a property. Objects can be nested.
+
+```js
+var unusualPropertyNames = {
+  "": "An empty string",
+  "!": "Bang!",
+  nested: {
+    "1": "value-1",
+    "2": "value-2"
+  }
+}
+```
+
+Non valid identifier can be accessed with array like notation `unusualPropertyNames["!"] == "Bang!"` 
+
 - - -
 
 ### Module pattern
+
+```js
+// Pub is our namespace
+window.Pub = (function (Pub) {
+  'use strict';
+
+  var pint = {}, // module
+    _quantity = 0; // private variable
+
+  function fill() { // private method
+    _quantity = 20;
+  }
+
+  function consume(quantityToConsume) { // private method
+    if (_quantity <= 0) {
+      return;
+    }
+    if (_quantity > quantityToConsume) {
+      _quantity -= quantityToConsume;
+    } else {
+      _quantity = 0;
+    }
+  }
+
+  fill();
+
+  // the following functions capture a copy
+  // of the outer function
+  pint.drink = function () {
+    consume(1);
+  };
+  pint.quaff = function () {
+    consume(4);
+  };
+  pint.downInOne = function () {
+    consume(_quantity);
+  };
+  pint.getQuantity = function () {
+    return _quantity;
+  };
+  pint.refill = function () {
+    fill();
+  };
+
+  Pub.pint = pint;
+  return Pub;
+
+}(window.Pub || {}));
+```
+Usage is `[window.]Pub.pint.drink();`
+
+
+### Module pattern
+
+We can define namespaces by creating nested objects.
+
+JavaScript does not have access modifiers but we can create private code by using closures.
+
+The returned module will define our public API.
 
 - - -
 
 ### Revealing module pattern
 
+```js
+// Pub is our namespace
+window.Pub = (function (Pub) {
+  'use strict';
+
+  var _quantity = 0; // private variable
+
+  function fill() { // private method
+    _quantity = 20;
+  }
+
+  function consume(quantityToConsume) { // private method
+    if (_quantity <= 0) {
+      return;
+    }
+    if (_quantity > quantityToConsume) {
+      _quantity -= quantityToConsume;
+    } else {
+      _quantity = 0;
+    }
+  }
+
+  function drink() {
+    consume(1);
+  }
+
+  function quaff() {
+    consume(4);
+  }
+
+  function downInOne() {
+    consume(_quantity);
+  }
+
+  function getQuantity() {
+    return _quantity;
+  }
+
+  fill(); // some behaviour
+
+  // we return an object literal that acts as a closure.
+  // after returning, the stack-frame is not destroyed (as opposed to C)
+  // a copy of the outer function is captured.
+  Pub.pint = {
+    drink: drink,
+    quaff: quaff,
+    downInOne: downInOne,
+    getQuantity: getQuantity,
+    refill: fill
+  };
+
+  return Pub;
+}(window.Pub || {}));
+```
+Usage is `[window.]Pub.pint.drink();`
+
+
+### Revealing module pattern
+
+The code defining the returned public API is very concise.
+
+There is no need to repeat multiple times the name of the class that will be returned.
+
 - - -
 
 ### Classic JavaScript objects
+
+```js
+// Pub is our namespace
+window.Pub = (function (Pub) {
+  'use strict';
+
+  function Pint() { // Constructor
+    this._quantity = 20; // private by convention
+  }
+
+  // private by convention
+  Pint.prototype._consume = function (quantityToConsume) {
+    if (this._quantity <= 0) {
+      return;
+    }
+    if (this._quantity > quantityToConsume) {
+      this._quantity -= quantityToConsume;
+    } else {
+      this._quantity = 0;
+    }
+  };
+
+  Pint.prototype.drink = function () {
+    this._consume(1);
+  };
+
+  Pint.prototype.quaff = function () {
+    this._consume(4);
+  };
+
+  Pint.prototype.downInOne = function () {
+    this._consume(this._quantity);
+  };
+
+  Pint.prototype.getQuantity = function () {
+    return this._quantity;
+  };
+
+  Pub.Pint = Pint;
+  return Pub;
+
+}(window.Pub || {}));
+```
+
+
+### Classic JavaScript objects
+Usage: 
+
+```js
+var pint = new window.Pub.Pint();
+pint.drink();
+```
+
+The `new` keyword creates a new object that inherits from function's prototype. `this` is bound to the newly created object's instance.
 
 - - -
 
