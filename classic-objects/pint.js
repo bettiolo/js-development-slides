@@ -2,9 +2,9 @@
 window.Pub = (function (Pub) {
 	'use strict';
 
-	var Pint = function () { // Constructor
+	function Pint() { // Constructor
 		this._quantity = 20; // private by convention
-	};
+	}
 
 	// private by convention
 	Pint.prototype._consume = function (quantityToConsume) {
