@@ -104,7 +104,6 @@ Behind the scene, everything has been attached to the `window` object.
 Only functions define scope, files or code blocks (like `if`, `for`, `do`, ...) does not.
 
 
-
 ### Let
 
 Declares a block scope local variable, optionally initializing it to a value.
@@ -117,7 +116,7 @@ for (let i = 0; i<10; i++) {
 alert(i); // i is not defined
 ```
 
-Supported by IE 11+, FF 11+ and Chrome 19+
+Supported by IE 11+, FF 11+ and Chrome 19+ and available in EcmaScript 6
 
 - - -
 
@@ -178,17 +177,25 @@ function outer() {
 outer();
 ```
 
+- function-scoped
+- hoist to the top of its function
+- redeclarations of the same name in the same scope are no-ops
+
+- - -
 
 ### Strict mode
 
-`'use strict';` as the first instruction in a file or in a function scope.
+`'use strict';` as the first instruction (file or function).
 
-Strict mode changes both syntax and runtime behavior. Changes generally fall into these categories: changes converting mistakes into errors (as syntax errors or at runtime), changes simplifying how the particular variable for a given use of a name is computed, changes simplifying eval and arguments, changes making it easier to write "secure" JavaScript, and changes anticipating future ECMAScript evolution.
+Changes both syntax and runtime behavior.
 
 Makes JS development more sane, for example, accidental definition of global variables throws `ReferenceError`.
 
-https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions_and_function_scope/Strict_mode
-
+- Changes converting mistakes into errors (as syntax errors or at runtime)
+- Changes simplifying how the particular variable for a given use of a name is computed,
+- Changes simplifying eval and arguments
+- Changes making it easier to write "secure" JavaScript
+- Changes anticipating future ECMAScript evolution
 
 
 ### Douglas Crackford's one var per function rule
@@ -208,6 +215,8 @@ for (i = 0; i < values.length; i++) {
     this._normalizedParameters.push(encodedKey + '=' + encodedValue)
 }
 ```
+
+Plus makes SRP violation very clear :)
 
 - - -
 
@@ -254,8 +263,7 @@ Store the settings in `.jshintrc` file in the root of your project
 
 ### Closures
 
-A closure is a special kind of object that combines two things: a function, and the environment in which that function was created.
-The environment consists of any local variables that were in-scope at the time that the closure was created.
+Functions can access parent scopes.
 
 ```js
 function outer() {
@@ -263,6 +271,7 @@ function outer() {
   var outerVariable = 10;
 
   function inner() {
+    outerVariable++;
     var innerVariable = 20;
     console.log('Outer Variable from Inner: ' + outerVariable);
     console.log('Inner Variable from Inner: ' + innerVariable);
@@ -271,10 +280,26 @@ function outer() {
   console.log('Inner Variable from Outer: ' + (typeof innerVariable));
   return inner;
 }
-var inner = outer();
+var innerCopy1 = outer();
+var innerCopy2 = outer();
 // ... later
-inner();
+innerCopy2();
+innerCopy2();
+innerCopy1();
 ```
+
+
+### Closures
+
+A closure is a special kind of object that combines two things: a function, and the environment in which that function was created.
+The environment consists of any local variables that were in-scope at the time that the closure was created.
+
+
+### Closures
+
+Changing the variables in the outer scope of one closure does not affect the other.
+
+![](screenshots/closure-output.png)
 
 - - -
 
