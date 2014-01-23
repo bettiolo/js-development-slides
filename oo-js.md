@@ -4,11 +4,7 @@
 
 API Developer at 7digital
 
-marco@bettiolo.it
-
-@bettiolo
-
-http://bettiolo.it
+Passionate about open-source
 
 
 ![](screenshots/7digital.png)
@@ -137,16 +133,16 @@ function outer() {
 
   function inner() {
     var variable = 10;
-    console.log('Inner value is ' + variable); // 10
+    console.log('Inner is ' + variable); // 10
   }
   inner();
 
-  console.log('Outer value is ' + variable); // undefined
+  console.log('First outer is ' + variable); // undefined
   if (true) {
     var variable = 30;
-    console.log('Block value is ' + variable); // 30
+    console.log('Block is ' + variable); // 30
   }
-  console.log('Final value is ' + variable); // 30
+  console.log('Final outer is ' + variable); // 30
 }
 outer();
 ```
@@ -274,6 +270,12 @@ Supported by IE 11+, FF 11+ and Chrome 19+
 
 ### Closures
 
+It is a special kind of object that combines two things: a function, and the environment in which that function was created.
+The environment consists of any local variables that were in-scope at the time that the closure was created.
+
+
+### Closures
+
 Inner functions can access outer context. Outer function cannot access inner context. We can use this rules to structure code and to prevent global object pollution.
 
 ```js
@@ -302,12 +304,6 @@ innerCopy1();
 
 ### Closures
 
-A closure is a special kind of object that combines two things: a function, and the environment in which that function was created.
-The environment consists of any local variables that were in-scope at the time that the closure was created.
-
-
-### Closures
-
 Changing the variables in the outer scope of one closure does not affect the other because each closure has it's own copy of the context.
 
 ![](screenshots/closure-output.png)
@@ -324,9 +320,29 @@ Changing the variables in the outer scope of one closure does not affect the oth
 })();
 ```
 
-In JavaScript, every function, when invoked, creates a new execution context. Because variables and functions defined within a function may only be accessed inside, but not outside, that context, invoking a function provides a very easy way to create privacy.
+In JavaScript, every function, when invoked, creates a new execution context. Because variables and functions defined within a function may only be accessed inside, but not outside that context, invoking a function provides a very easy way to create privacy.
 
 - - -
+
+### Object literal
+
+A list of zero or more pairs of property names and associated values of an object, enclosed in curly braces ({}).
+Numeric or string literal can be used for the name of a property. Objects can be nested.
+
+```js
+var unusualPropertyNames = {
+  simple: "value",
+  "": "An empty string",
+  "!": "Bang!",
+  nested: {
+    "1": "value-1",
+    "2": "value-2"
+  }
+}
+```
+
+Non valid identifier can be accessed with array like notation `unusualPropertyNames["!"] == "Bang!"` 
+
 
 ### Object literal
 
@@ -362,28 +378,13 @@ In JavaScript, every function, when invoked, creates a new execution context. Be
 ```
 We can access our object like: `[window.]pint.drink();`
 
-
-### Object literal
-
-Is a list of zero or more pairs of property names and associated values of an object, enclosed in curly braces ({}).
-Numeric or string literal can be used for the name of a property. Objects can be nested.
-
-```js
-var unusualPropertyNames = {
-  "": "An empty string",
-  "!": "Bang!",
-  nested: {
-    "1": "value-1",
-    "2": "value-2"
-  }
-}
-```
-
-Non valid identifier can be accessed with array like notation `unusualPropertyNames["!"] == "Bang!"` 
-
 - - -
 
 ### Module pattern
+
+JavaScript does not have access modifiers but we can create private code by using closures.
+
+The returned module will define our public API.
 
 ```js
 // Pub is our namespace
@@ -411,7 +412,7 @@ window.Pub = (function (Pub) {
   fill();
 
   // the following functions capture a copy
-  // of the outer function
+  // of the outer context
   pint.drink = function () {
     consume(1);
   };
@@ -435,18 +436,13 @@ window.Pub = (function (Pub) {
 ```
 Usage is `[window.]Pub.pint.drink();`
 
-
-### Module pattern
-
-We can define namespaces by creating nested objects.
-
-JavaScript does not have access modifiers but we can create private code by using closures.
-
-The returned module will define our public API.
-
 - - -
 
 ### Revealing module pattern
+
+The code defining the returned public API is very concise.
+
+There is no need to repeat multiple times the name of the class that will be returned.
 
 ```js
 // Pub is our namespace
@@ -503,13 +499,6 @@ window.Pub = (function (Pub) {
 }(window.Pub || {}));
 ```
 Usage is `[window.]Pub.pint.drink();`
-
-
-### Revealing module pattern
-
-The code defining the returned public API is very concise.
-
-There is no need to repeat multiple times the name of the class that will be returned.
 
 - - -
 
@@ -664,9 +653,9 @@ pint instanceof Object // TRUE
 ```
 
 JavaScript will go up the prototype chain to find the `drink()` method.
-First, it will look on Pint object's prototype. Then it will look on Glass and find the method.
+First, it will look on Pint object. Then it will look on Glass' prototype to find that method.
 
-`instanceof` will check that the instance's proptotype match, if not will go up the prototype chain to Object.
+`instanceof` will check that the instance's proptotype match the right hand's one. If it does not, it will go up the prototype chain.
 
 - - -
 
@@ -788,6 +777,8 @@ Inheritance
 
 ### CoffeeScript
 
+Very compact syntax and a lot of shorthands
+
 ```coffeescript
 window.Pub = ((Pub) ->
 
@@ -833,6 +824,8 @@ window.Pub = ((Pub) ->
 - - - 
 
 ### TypeScript
+
+Great compile type debug support
 
 (Sorry for the formatting)
 
@@ -989,3 +982,5 @@ marco@bettiolo.it
 @bettiolo
 
 http://bettiolo.it
+
+Code: http://github.com/bettiolo/js-development-slides
