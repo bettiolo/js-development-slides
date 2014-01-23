@@ -1,3 +1,13 @@
+#Welcome!
+
+You can navigate the slides horizontally and vertically.
+
+Each topic is divided in vertical columns of slides.
+
+Let the arrows on the bottom-right corner be yout guide.
+
+- - -
+
 # Object Oriented Javascript
 
 ## Marco Bettiolo
