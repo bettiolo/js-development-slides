@@ -1,13 +1,11 @@
-Source code for my talks
-========================
+Source code for my talks about JavaScript
+=========================================
 
 ## Object Oriented Javascript talk
 
 Slides: http://bettiolo.github.io/js-development-slides/oo-js.html
 
 More info: http://www.meetup.com/HTML5-CodeShow/events/159156372/
-
-- - -
 
 ## Test Driven, Object Oriented Javascript and Tools talk
 
