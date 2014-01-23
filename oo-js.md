@@ -8,9 +8,13 @@ Let the arrows on the bottom-right corner be yout guide.
 
 - - -
 
-# Object Oriented Javascript
+## Object Oriented
 
-## Marco Bettiolo
+## Javascript
+
+by
+
+### Marco Bettiolo
 
 API Developer at 7digital
 
